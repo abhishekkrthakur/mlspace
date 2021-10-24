@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: mlspace
+Version: 0.0.1
+Summary: mlspace
+Home-page: https://github.com/abhishekkrthakur/mlspace
+Author: Abhishek Thakur
+Author-email: abhishek4@gmail.com
+License: Apache License
+Platform: linux
+Platform: unix
+Requires-Python: >3.5.2
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# mlspace
+
