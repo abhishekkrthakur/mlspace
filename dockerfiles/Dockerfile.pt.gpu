@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.1-cudnn8-devel-ubuntu18.04
+FROM nvidia/cuda:11.4.2-cudnn8-runtime-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Oslo
@@ -24,7 +24,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && sh Miniconda3-latest-Linux-x86_64.sh -b \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
 ENV PATH /root/miniconda3/bin:$PATH
-RUN conda create -y -n ml python=3.8
+RUN conda create -y -n mlspace python=3.8
 RUN conda init bash
 
 RUN apt-get install -y git curl
@@ -32,4 +32,4 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 RUN apt-get install -y git-lfs
 RUN git lfs install
 
-RUN /bin/bash -c "source activate ml && conda install pytorch torchaudio cudatoolkit=11.1 -c pytorch -c conda-forge"
+RUN /bin/bash -c "source activate mlspace && conda install pytorch torchaudio cudatoolkit=11.3 -c pytorch -c conda-forge"
