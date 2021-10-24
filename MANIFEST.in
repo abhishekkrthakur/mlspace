@@ -1,0 +1,5 @@
+include scripts/install_docker.sh
+include scripts/install_mlspace.sh
+include scripts/install_nvidia_docker.sh
+include scripts/install_nvidia_drivers.sh
+include dockerfiles/Dockerfile.pt.gpu

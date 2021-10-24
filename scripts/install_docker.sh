@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
 sudo apt-get remove -y docker docker-engine docker.io containerd runc
 sudo apt-get update
 sudo apt-get install -y \
@@ -16,7 +20,7 @@ echo \
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-sudo groupadd docker
+sudo groupadd -f docker
 sudo usermod -aG docker $USER
 
 sudo systemctl enable docker.service
