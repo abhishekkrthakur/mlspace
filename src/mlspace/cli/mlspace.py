@@ -1,6 +1,7 @@
 import argparse
 
 from .. import __version__
+from .create import CreateMLSpaceCommand
 
 
 def main():
@@ -10,6 +11,9 @@ def main():
         epilog="For more information about a command, run: `mlspace <command> --help`",
     )
     parser.add_argument("--version", "-v", help="Display MLSpace version", action="store_true")
+
+    commands_parser = parser.add_subparsers(help="commands")
+    CreateMLSpaceCommand.register_subcommand(commands_parser)
 
     args = parser.parse_args()
 
@@ -22,7 +26,7 @@ def main():
         exit(1)
 
     command = args.func(args)
-    command.run()
+    command.execute()
 
 
 if __name__ == "__main__":

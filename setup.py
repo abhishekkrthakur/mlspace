@@ -4,6 +4,8 @@ from setuptools import find_packages, setup
 with open("README.md") as f:
     long_description = f.read()
 
+INSTALL_REQUIRES = ["loguru==0.5.3"]
+
 
 if __name__ == "__main__":
     setup(
@@ -20,7 +22,7 @@ if __name__ == "__main__":
         packages=find_packages("src"),
         entry_points={"console_scripts": ["mlspace=mlspace.cli.mlspace:main"]},
         include_package_data=True,
-        install_requires=["torch>=1.6.0"],
+        install_requires=INSTALL_REQUIRES,
         platforms=["linux", "unix"],
         python_requires=">3.5.2",
     )
