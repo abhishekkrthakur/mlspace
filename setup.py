@@ -4,14 +4,13 @@ from setuptools import find_packages, setup
 with open("README.md") as f:
     long_description = f.read()
 
-INSTALL_REQUIRES = ["loguru==0.5.3"]
+INSTALL_REQUIRES = []
 
 
 if __name__ == "__main__":
     setup(
-        name="mlspace",
-        version="0.0.2",
-        description="mlspace",
+        name="MLSpace",
+        description="MLSpace: no hassle machine learning and deep learning",
         long_description=long_description,
         long_description_content_type="text/markdown",
         author="Abhishek Thakur",

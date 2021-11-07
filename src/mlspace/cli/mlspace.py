@@ -2,6 +2,9 @@ import argparse
 
 from .. import __version__
 from .create import CreateMLSpaceCommand
+from .setup import SetupMLSpaceCommand
+from .start import StartMLSpaceCommand
+from .stop import StopMLSpaceCommand
 
 
 def main():
@@ -14,6 +17,9 @@ def main():
 
     commands_parser = parser.add_subparsers(help="commands")
     CreateMLSpaceCommand.register_subcommand(commands_parser)
+    SetupMLSpaceCommand.register_subcommand(commands_parser)
+    StartMLSpaceCommand.register_subcommand(commands_parser)
+    StopMLSpaceCommand.register_subcommand(commands_parser)
 
     args = parser.parse_args()
 
