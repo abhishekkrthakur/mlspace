@@ -1,8 +1,0 @@
-black==21.9b0
-huggingface_hub==0.0.19
-jupyter==1.0.0
-jupyterlab==3.2.1
-matplotlib==3.4.3
-transformers==4.11.3
-scikit-learn==1.0.1
-seaborn==0.11.2
