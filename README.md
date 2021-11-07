@@ -1,8 +1,6 @@
-<p align="center">
-    <br>
-    <h1>MLSpace</h1>
-    <br>
-<p>
+<h1 align="center">
+    MLSpace
+</h1>
 
 <h3 align="center">
     <p>Hassle-Free Machine Learning & Deep Learning Development</p>
