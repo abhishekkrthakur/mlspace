@@ -4,11 +4,13 @@ import sys
 
 from .dockerfiles import TORCH_GPU
 from .logger import logger
+from .requirements import BASE_REQUIREMENTS
 
 
 class MLSpace:
     def __init__(self) -> None:
         self.home_dir = os.path.expanduser("~")
+        self.dockerfiles_dir = os.path.join(self.home_dir, ".mlspace/dockerfiles")
 
     def create_space(self, name: str, backend: str, gpu: bool):
         self._create_required_folders(name=name)
@@ -18,14 +20,20 @@ class MLSpace:
     def _build_container(self, name, backend, gpu):
         if backend == "torch" and gpu is True:
             docker_file = "Dockerfile.torch.gpu"
-            with open(f"{self.home_dir}/.mlspace/dockerfiles/{docker_file}", "w") as f:
+            requirements_file = "requirements.torch.gpu"
+            docker_file_path = os.path.join(self.home_dir, f".mlspace/dockerfiles/{docker_file}")
+            requirements_path = os.path.join(self.home_dir, f".mlspace/dockerfiles/{requirements_file}")
+            with open(docker_file_path, "w") as f:
                 f.write(TORCH_GPU.strip())
+            with open(requirements_path, "w") as f:
+                f.write(BASE_REQUIREMENTS.strip())
         else:
             logger.error(f"Unknown backend: {backend}")
             sys.exit(1)
 
-        command = f"docker build -t {name} -f {self.home_dir}/.mlspace/dockerfiles/{docker_file} ."
-        print(command)
+        command1 = f"docker build -t {name} --build-arg requirements={requirements_file}"
+        command2 = f"-f {docker_file_path} {self.dockerfiles_dir}"
+        command = f"{command1} {command2}"
         logger.info(f"Building space `{name}`. This may take a while...")
         self._run_command(command)
         logger.info(f"Space `{name}` successfully built.")
@@ -136,9 +144,16 @@ class MLSpace:
 
         command = f"docker rm {name}_code"
         self._run_command(command)
+
+        command = f"docker stop {name}_lab"
+        self._run_command(command)
+
+        command = f"docker rm {name}_lab"
+        self._run_command(command)
+
         logger.info(f"Space {name} stopped")
 
-    def start(self, name, folder_path, coder_port=15000):
+    def start(self, name, folder_path, coder_port=15000, lab_port=15001):
         logger.info(f"Starting space {name} on {folder_path}")
         # extract password from yaml file
         # with open(f"{folder_path}/config.yaml", "r") as f:
@@ -153,4 +168,11 @@ class MLSpace:
         command2 = f"-p {coder_port}:3000 -v {folder_path}:/workspace {name}"
         command3 = "code-server /workspace --bind-addr 0.0.0.0:3000"
         command = f"{command1} {command2} {command3}"
+        self._run_command(command)
+
+        command1 = f"docker run --name {name}_lab -itd -u {user_id}:{group_id} -e PASSWORD={password}"
+        command2 = f"-p {lab_port}:3001 -v {folder_path}:/workspace {name}"
+        command3 = "jupyter-lab /workspace --ip='*' --port 3001 --no-browser"
+        command4 = "--NotebookApp.token='' --NotebookApp.password=''"
+        command = f"{command1} {command2} {command3} {command4}"
         self._run_command(command)

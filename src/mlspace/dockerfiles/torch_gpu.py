@@ -2,6 +2,7 @@ DOCKERFILE = """
 FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG requirements
 ENV TZ=Europe/Oslo
 
 RUN apt-get update
@@ -17,6 +18,9 @@ RUN apt-get install -y \
 
 RUN curl -fOL https://github.com/cdr/code-server/releases/download/v3.12.0/code-server_3.12.0_amd64.deb
 RUN dpkg -i code-server_3.12.0_amd64.deb
+
+COPY ${requirements} requirements.txt
+RUN pip install -r requirements.txt
 
 RUN mkdir -p /workspace
 WORKDIR /workspace

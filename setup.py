@@ -9,7 +9,7 @@ INSTALL_REQUIRES = []
 
 if __name__ == "__main__":
     setup(
-        name="MLSpace",
+        name="mlspace",
         description="MLSpace: no hassle machine learning and deep learning",
         long_description=long_description,
         long_description_content_type="text/markdown",
