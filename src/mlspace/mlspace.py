@@ -14,6 +14,7 @@ from .scripts import install_docker, install_nvidia_docker, install_nvidia_drive
 class MLSpace:
     def __init__(self) -> None:
         self.home_dir = os.path.expanduser("~")
+        os.makedirs(f"{self.home_dir}/.mlspace", exist_ok=True)
         self.dockerfiles_dir = os.path.join(self.home_dir, ".mlspace/dockerfiles")
 
     def create_space(self, name: str, backend: str, gpu: bool):
