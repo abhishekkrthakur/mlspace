@@ -17,6 +17,7 @@ Setting up MLSpace is a three step process:
    - create and run environments
 
 .. code-block:: bash
+
    $ mlspace --help
 
    usage: mlspace <command> [<args>]
