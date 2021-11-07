@@ -12,6 +12,9 @@
     <a href="" alt="Python Version">
         <img src="https://img.shields.io/badge/python-3.5%2C3.6%2C3.7%2C3.8-blue?logo=python" />
     </a>
+    <a href="https://mlspace.rtfd.io/" alt="Docs">
+        <img src="https://img.shields.io/readthedocs/mlspace" />
+    </a>
 </p> 
 
 <h3 align="center">
