@@ -5,6 +5,10 @@ import sys
 from .dockerfiles import TORCH_GPU
 from .logger import logger
 from .requirements import BASE_REQUIREMENTS
+from getpass import getpass
+import tempfile
+
+from .scripts import install_docker, install_nvidia_docker, install_nvidia_drivers, base_script
 
 
 class MLSpace:
@@ -43,7 +47,6 @@ class MLSpace:
         os.makedirs(f"{self.home_dir}/.mlspace", exist_ok=True)
         os.makedirs(f"{self.home_dir}/.mlspace/dockerfiles", exist_ok=True)
         os.makedirs(f"{self.home_dir}/.mlspace/{name}", exist_ok=True)
-        os.makedirs(f"{self.home_dir}/.mlspace/{name}/logs", exist_ok=True)
         """
         if not os.path.exists(f"{self.home_dir}/.mlspace/{name}"):
             os.makedirs(f"{self.home_dir}/.mlspace/{name}", exist_ok=False)
@@ -54,89 +57,31 @@ class MLSpace:
         """
 
     @staticmethod
-    def _run_command(command):
+    def _run_command(command, password=None, ignore_errors=False):
         proc = subprocess.Popen(command.strip().split(), shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        _, err = proc.communicate()
-        if err:
+        if password is None:
+            _, err = proc.communicate()
+        else:
+            _, err = proc.communicate(password.encode())
+        if err and ignore_errors is False:
+            logger.error(command)
             logger.error(err)
             sys.exit(1)
 
-    def setup(self):
-        self._install_docker()
-        self._install_nvidia_driver()
-        self._install_nvidia_docker()
-
-    def _install_nvidia_driver(self, driver_verison=470):
-        # install nvidia drivers
-        command = "add-apt-repository -y ppa:graphics-drivers/ppa"
-        self._run_command(command)
-
-        command = "apt-get update"
-        self._run_command(command)
-
-        command = f"apt-get install -y nvidia-driver-{driver_verison}"
-        self._run_command(command)
-
-    def _install_nvidia_docker(self):
-        command = """
-        distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-        && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
-        && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
-        sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-        """
-        self._run_command(command)
-
-        command = "apt-get update"
-        self._run_command(command)
-
-        command = "apt-get install -y nvidia-docker2"
-        self._run_command(command)
-
-        command = "systemctl restart docker"
-        self._run_command(command)
-
-    def _install_docker(self):
-        # install docker
-        command = "apt-get remove -y docker docker-engine docker.io containerd runc"
-        self._run_command(command)
-
-        command = "apt-get update"
-        self._run_command(command)
-
-        command = "apt-get install -y ca-certificates curl gnupg lsb-release"
-        self._run_command(command)
-
-        command = "rm -rf /usr/share/keyrings/docker-archive-keyring.gpg"
-        self._run_command(command)
-
-        command = "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg"
-        self._run_command(command)
-
-        command = """
-        echo \
-            "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
-            https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
-            tee /etc/apt/sources.list.d/docker.list > /dev/null
-        """
-        self._run_command(command)
-
-        command = "apt-get update"
-        self._run_command(command)
-
-        command = "apt-get install -y docker-ce docker-ce-cli containerd.io"
-        self._run_command(command)
-
-        command = "groupadd -f docker"
-        self._run_command(command)
-
-        command = "usermod -aG docker $USER"
-        self._run_command(command)
-
-        command = "systemctl enable docker.service"
-        self._run_command(command)
-
-        command = "systemctl enable containerd.service"
-        self._run_command(command)
+    def setup(self, version=470):
+        install_script = os.path.join(self.home_dir, ".mlspace/installer.sh")
+        with open(install_script, "w") as f:
+            f.write(base_script)
+            f.write("\n")
+            f.write(install_docker.strip())
+            f.write("\n")
+            f.write(install_nvidia_docker.strip())
+            f.write("\n")
+            f.write(install_nvidia_drivers.strip().format(version=version))
+        command = f"sudo sh {install_script}"
+        subprocess.run(command.split(), stderr=sys.stderr, stdout=sys.stdout)
+        logger.info("Setup complete")
+        logger.info("Now, it would be a nice idea to restart your computer :)")
 
     def stop(self, name: str):
         command = f"docker stop {name}_code"
