@@ -1,4 +1,13 @@
-# MLSpace: Hassle free machine learning & deep learning development
+<p align="center">
+    <br>
+    <h1>MLSpace</h1>
+    <br>
+<p>
+
+<h3 align="center">
+    <p>Hassle-Free Machine Learning & Deep Learning Development</p>
+</h3>
+
 
 - No need to worry about CUDA
 - No need to worry about cuDNN
