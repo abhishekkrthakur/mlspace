@@ -1,11 +1,22 @@
 <h1 align="center">
     <p>MLSpace</p>
 </h1>
+
 <p align="center">
-[![license](https://img.shields.io/badge/license-Apache2.0-blue.svg)](/LICENSE)
-[![PyPI version](https://badge.fury.io/py/mlspace.svg)](https://badge.fury.io/py/mlspace)
-![python version](https://img.shields.io/badge/python-3.5%2C3.6%2C3.7%2C3.8-blue?logo=python)
-</p>
+    <a href="" alt="License">
+        <img src="https://img.shields.io/badge/license-Apache2.0-blue.svg" />
+    </a>
+
+    <a href="https://badge.fury.io/py/mlspace" alt="PyPI">
+        <img src="https://badge.fury.io/py/mlspace.svg" />
+    </a>
+
+    <a href="" alt="Python Version">
+        <img src="https://img.shields.io/badge/python-3.5%2C3.6%2C3.7%2C3.8-blue?logo=python" />
+    </a>
+
+</p> 
+
 <h3 align="center">
     <p>Hassle-Free Machine Learning & Deep Learning Development</p>
 </h3>
