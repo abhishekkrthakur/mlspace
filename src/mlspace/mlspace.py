@@ -5,10 +5,7 @@ import sys
 from .dockerfiles import TORCH_GPU
 from .logger import logger
 from .requirements import BASE_REQUIREMENTS
-from getpass import getpass
-import tempfile
-
-from .scripts import install_docker, install_nvidia_docker, install_nvidia_drivers, base_script
+from .scripts import base_script, install_docker, install_nvidia_docker, install_nvidia_drivers
 
 
 class MLSpace:
