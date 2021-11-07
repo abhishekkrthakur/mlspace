@@ -8,3 +8,5 @@
 
 
 *coming soon*
+
+**NOTE: PRs are currently not accepted. All PRs will be closed. Please use issues instead.**

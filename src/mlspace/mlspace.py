@@ -136,6 +136,7 @@ class MLSpace:
 
         command = f"docker rm {name}_code"
         self._run_command(command)
+        logger.info(f"Space {name} stopped")
 
     def start(self, name, folder_path, coder_port=15000):
         logger.info(f"Starting space {name} on {folder_path}")
